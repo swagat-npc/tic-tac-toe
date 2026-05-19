@@ -17,6 +17,7 @@ const App = () => {
   const resetGame = () => {
     resetCells();
     resetTurn();
+    setGameEnd(false);
   }
 
   const resetCells = () => {
