@@ -1,5 +1,5 @@
 import "./CellBtn.css"
-import { CellState } from "../types/CellState"
+import { CellState } from "../types/State"
 import SymbolX from "../assets/X.png"
 import SymbolO from "../assets/O.png"
 

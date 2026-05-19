@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import CellBtn from './components/CellBtn'
-import { CellState } from './types/CellState';
+import { CellState, GameState } from './types/State';
 import ActionBtn from './components/ActionBtn';
 import MainHeader from './components/MainHeader';
 
@@ -53,10 +53,16 @@ const App = () => {
     return (turn % 2 == 0 ? CellState.O : CellState.X);
   }
 
+  const gameState = (): GameState => {
+    if (!gameEnd) return GameState.Ongoing;
+
+    return GameState.Win;
+  }
+
   return (
     <div className="main-container">
       <section id="header">
-        <MainHeader currentTurn={currentTurn()}></MainHeader>
+        <MainHeader currentTurn={currentTurn()} gameState={gameState()}></MainHeader>
       </section>
       <section id="grid">
         <div className="cell-btn-container">
