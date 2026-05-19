@@ -36,16 +36,18 @@ const App = () => {
     ]);
   }
 
-  const endGame = (updatedCells: CellState[]) => {
-    // Check winning conditions
+  const checkWinConditions = (updatedCells: CellState[]) => {
     let win = null;
     for (let i = 0; i < WIN_CONDITIONS.length; i++) {
       const group = WIN_CONDITIONS[i];
-      if (updatedCells[group[0]] == updatedCells[group[1]] && updatedCells[group[1]] == updatedCells[group[2]]) {
+      if (updatedCells[group[0]] == updatedCells[group[1]] && updatedCells[group[1]] == updatedCells[group[2]] && updatedCells[group[0]] != CellState.T) {
         win = updatedCells[group[0]] == CellState.X;
         break;
       }      
     }
+    return win;
+  }
+  const endGame = (win: boolean | null) => {
     if (win === true) {
       setGameState(GameState.Win);
     } else if (win === false) {
@@ -69,12 +71,15 @@ const App = () => {
     updatedCells[index] = currentTurn();
     setCell(updatedCells);
 
-    const nextTurn = turn + 1;
-    setTurn(nextTurn);
+    const win = checkWinConditions(updatedCells);
     
-    if (nextTurn > 9) {
-      endGame(updatedCells);
+    const nextTurn = turn + 1;
+    if (nextTurn > 9 || win != null) {
+      endGame(win);
+      return;
     }
+    
+    setTurn(nextTurn);
   }
 
   const currentTurn = (): CellState => {
@@ -90,7 +95,7 @@ const App = () => {
         <div className="cell-btn-container">
           {
             cells.map((cell, index) => {
-              return <CellBtn key={index} placement={index} symbol={cell} currentTurn={currentTurn()} disabled={cell != CellState.T} action={changeTurn} />
+              return <CellBtn key={index} placement={index} symbol={cell} currentTurn={currentTurn()} disabled={cell != CellState.T} action={changeTurn} customClass={gameEnd ? "ended" : ""} />
             })
           }
         </div>

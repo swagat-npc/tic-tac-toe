@@ -8,17 +8,18 @@ type CellBtnProps = {
     symbol: CellState,
     currentTurn: CellState,
     disabled: boolean,
+    customClass: string,
     action: (placement: number) => void
 }
 
-const CellBtn = ({ placement, symbol, currentTurn, disabled, action }: CellBtnProps ) => {
+const CellBtn = ({ placement, symbol, currentTurn, disabled, customClass, action }: CellBtnProps ) => {
   const btnAction = () => {
     action(placement);
   }
 
   return (
     <>
-      <button type="button" className="cell" onClick={btnAction} disabled={disabled}>
+      <button type="button" className={`cell${" " + customClass}`} onClick={btnAction} disabled={disabled}>
         {
           symbol != CellState.T && (
             <img src={ symbol == CellState.X ? SymbolX : SymbolO } alt={ symbol == CellState.X ? "X" : "O" } />
