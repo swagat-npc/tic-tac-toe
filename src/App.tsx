@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import CellBtn from './components/CellBtn'
 import { CellState } from './types/CellState';
+import ActionBtn from './components/ActionBtn';
 
 const App = () => {
   const [turn, setTurn] = useState<number>(1);
   const [cells, setCell] = useState<CellState[]>([]);
+  const [gameEnd, setGameEnd] = useState<boolean>(false);
 
   useEffect(() => {
     resetGame();
@@ -29,6 +31,8 @@ const App = () => {
   }
 
   const changeTurn = (index: number) => {
+    if (gameEnd) return;
+
     setCell(prev => {
       const updatedCells = [...prev];
       updatedCells[index] = currentTurn();
@@ -39,7 +43,7 @@ const App = () => {
     setTurn(nextTurn);
     
     if (nextTurn > 9) {
-      resetGame();
+      setGameEnd(true);
     }
   }
 
@@ -48,7 +52,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="main-container">
       <section id="header">
         <div className="title">
           Tic-Tac-Toe
@@ -66,7 +70,10 @@ const App = () => {
           }
         </div>
       </section>
-    </>
+      <section id="actions">
+          <ActionBtn label="Reset" action={resetGame}/>
+      </section>
+    </div>
   )
 }
 
