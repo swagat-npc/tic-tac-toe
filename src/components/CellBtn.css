@@ -22,6 +22,11 @@
     outline-offset: 2px;
   }
 
+  &.winner {
+    background: var(--win-bg);
+    border-color: var(--win-border);
+  }
+
   img {
     width: 80%;
     height: auto;

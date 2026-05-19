@@ -15,17 +15,19 @@ const App = () => {
   const [turn, setTurn] = useState<number>(1);
   const [cells, setCell] = useState<CellState[]>([]);
   const [gameEnd, setGameEnd] = useState<boolean>(false);
-  const [gameState, setGameState] = useState<GameState>(GameState.Ongoing)
+  const [gameState, setGameState] = useState<GameState>(GameState.Ongoing);
+  const [winCombo, setWinCombo] = useState<number[]>([]);
 
   useEffect(() => {
     resetGame();
   }, []);
   
   const resetGame = () => {
-    resetCells();
     resetTurn();
+    resetCells();
     setGameEnd(false);
     setGameState(GameState.Ongoing);
+    setWinCombo([]);
   }
 
   const resetCells = () => {
@@ -42,6 +44,7 @@ const App = () => {
       const group = WIN_CONDITIONS[i];
       if (updatedCells[group[0]] == updatedCells[group[1]] && updatedCells[group[1]] == updatedCells[group[2]] && updatedCells[group[0]] != CellState.T) {
         win = updatedCells[group[0]] == CellState.X;
+        setWinCombo([...group])
         break;
       }      
     }
@@ -95,7 +98,7 @@ const App = () => {
         <div className="cell-btn-container">
           {
             cells.map((cell, index) => {
-              return <CellBtn key={index} placement={index} symbol={cell} currentTurn={currentTurn()} disabled={cell != CellState.T} action={changeTurn} customClass={gameEnd ? "ended" : ""} />
+              return <CellBtn key={index} placement={index} symbol={cell} currentTurn={currentTurn()} disabled={cell != CellState.T} action={changeTurn} customClass={(winCombo.includes(index) ? "winner " : "") + (gameEnd ? "ended" : "")} />
             })
           }
         </div>
