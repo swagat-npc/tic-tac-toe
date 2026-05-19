@@ -3,6 +3,7 @@ import './App.css'
 import CellBtn from './components/CellBtn'
 import { CellState } from './types/CellState';
 import ActionBtn from './components/ActionBtn';
+import MainHeader from './components/MainHeader';
 
 const App = () => {
   const [turn, setTurn] = useState<number>(1);
@@ -54,12 +55,7 @@ const App = () => {
   return (
     <div className="main-container">
       <section id="header">
-        <div className="title">
-          Tic-Tac-Toe
-        </div>
-        <div className="turn-container">
-          Current Turn: Player {currentTurn()} - Turn {turn}
-        </div>
+        <MainHeader currentTurn={currentTurn()}></MainHeader>
       </section>
       <section id="grid">
         <div className="cell-btn-container">

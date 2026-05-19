@@ -1,0 +1,44 @@
+.main-header-container {
+    .turn-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 250px;
+        margin: 25px 0;
+    }
+    
+    img {
+        width: 20px;
+        height: auto;
+    }
+    
+    .player-turn {
+        padding: 10px;
+        width: 40%;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        
+        &.left {
+            text-align: left;
+        }
+        
+        &.right {
+            text-align: right;
+        }
+
+        &.current-turn {
+            background-color: #000000;
+            opacity: 1;
+            
+            .current-indicator {
+                opacity: 1;
+            }
+        }
+
+        .current-indicator {
+            opacity: 0;
+        }
+    }
+}

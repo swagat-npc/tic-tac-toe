@@ -6,7 +6,6 @@
   background: var(--accent-bg);
   border: 2px solid transparent;
   transition: border-color 0.3s;
-  margin-bottom: 24px;
   width: 125px;
   height: 125px;
   padding: 20px;
