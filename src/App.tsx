@@ -61,7 +61,7 @@ const App = () => {
         <div className="cell-btn-container">
           {
             cells.map((cell, index) => {
-              return <CellBtn key={index} placement={index} symbol={cell} disabled={cell != CellState.T} action={changeTurn} />
+              return <CellBtn key={index} placement={index} symbol={cell} currentTurn={currentTurn()} disabled={cell != CellState.T} action={changeTurn} />
             })
           }
         </div>

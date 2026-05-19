@@ -6,14 +6,13 @@
   border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
-  justify-content: space-around;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 100px;
+  padding: 80px 100px;
 }
 
 #grid {
-  margin: auto;
+  margin: 0 auto;
   margin-bottom: 35px;
   padding: 10px;
   border-radius: 5px;

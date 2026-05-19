@@ -1,14 +1,20 @@
 .main-header-container {
+    img {
+        width: 20px;
+        height: auto;
+    }
+    
+    .title {
+        font-weight: 800;
+        font-size: 42px;
+        margin-bottom: 20px;
+    }
+    
     .turn-container {
         display: flex;
         justify-content: space-between;
         padding: 0 250px;
-        margin: 25px 0;
-    }
-    
-    img {
-        width: 20px;
-        height: auto;
+        margin: 40px 0;
     }
     
     .player-turn {
