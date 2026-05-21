@@ -22,7 +22,7 @@ const App = () => {
   const [cells, setCells] = useState<CellState[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.Ongoing);
   const [winCombo, setWinCombo] = useState<number[]>([]);
-  const [singleplayer, setSingleplayer] = useState<boolean>(true);
+  const [singlePlayer, setSinglePlayer] = useState<boolean>(true);
 
   useEffect(() => {
     resetGame();
@@ -75,7 +75,7 @@ const App = () => {
     if (!processTurn(updatedCells, turn)) return;
     const nextTurn = turn + 1;
 
-    if (currentTurn(nextTurn) === CellState.O && singleplayer) {
+    if (currentTurn(nextTurn) === CellState.O && singlePlayer) {
       handleAI(nextTurn, updatedCells);
     }
   };
@@ -93,7 +93,7 @@ const App = () => {
   const processTurn = (updatedCells: CellState[], turn: number): boolean => {
     const winInfo = checkWinConditions(updatedCells);
     const nextTurn = turn + 1;
-    if (nextTurn > TOTAL_TURNS || winInfo.win !== null) {
+    if (nextTurn >= TOTAL_TURNS || winInfo.win !== null) {
       endGame(winInfo.win);
       setWinCombo(winInfo.winCombo);
       return false;
@@ -160,7 +160,7 @@ const App = () => {
   };
 
   const modeChange = () => {
-    setSingleplayer(!singleplayer);
+    setSinglePlayer(!singlePlayer);
     resetGame();
   }
 
@@ -170,7 +170,7 @@ const App = () => {
         <MainHeader
           currentTurn={currentTurn(turn)}
           gameState={gameState}
-          mode={singleplayer}
+          mode={singlePlayer}
           modeAction={modeChange}
         ></MainHeader>
       </section>
