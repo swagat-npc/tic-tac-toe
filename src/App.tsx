@@ -22,6 +22,7 @@ const App = () => {
   const [cells, setCells] = useState<CellState[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.Ongoing);
   const [winCombo, setWinCombo] = useState<number[]>([]);
+  const [singleplayer, setSingleplayer] = useState<boolean>(true);
 
   useEffect(() => {
     resetGame();
@@ -74,7 +75,7 @@ const App = () => {
     if (!processTurn(updatedCells, turn)) return;
     const nextTurn = turn + 1;
 
-    if (currentTurn(nextTurn) === CellState.O) {
+    if (currentTurn(nextTurn) === CellState.O && singleplayer) {
       handleAI(nextTurn, updatedCells);
     }
   };
@@ -158,12 +159,19 @@ const App = () => {
     return givenTurn % 2 === 0 ? CellState.X : CellState.O;
   };
 
+  const modeChange = () => {
+    setSingleplayer(!singleplayer);
+    resetGame();
+  }
+
   return (
     <div className="main-container">
       <section id="header">
         <MainHeader
           currentTurn={currentTurn(turn)}
           gameState={gameState}
+          mode={singleplayer}
+          modeAction={modeChange}
         ></MainHeader>
       </section>
       <section id="grid">
@@ -187,7 +195,7 @@ const App = () => {
         </div>
       </section>
       <section id="actions">
-        <ActionBtn label="Reset" action={resetGame} />
+        <ActionBtn label="Reset 🖱✨" action={resetGame} />
       </section>
     </div>
   );

@@ -1,6 +1,7 @@
 :root {
   --btn-width: 8rem;
   --btn-height: 2.5rem;
+  --btn-height-variant: 1.65rem;
   --btn-bg: hsl(0, 94%, 72%);
   --btn-bottom-bg: hsl(0, 62%, 67%);
   --btn-shadow-bg: hsla(0, 62%, 67%, 0.15);
@@ -11,7 +12,7 @@
   --border-radius: 10px 10px 15px 15px;
 }
 
-.container {
+.action-btn-container {
   position: relative;
   max-width: 200px;
 
@@ -66,6 +67,24 @@
 
     .action-btn__bottom {
       background-color: var(--btn-bottom-disabled-bg);
+    }
+  }
+
+  &.variant {
+    .action-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 0;
+      font-size: 0.75rem;
+    }
+
+    .action-btn__bottom {
+      height: var(--btn-height-variant);
+      border-radius: 0;
+    }
+
+    .action-btn__shadow {
+      height: var(--btn-height-variant);
+      border-radius: 0;
     }
   }
 }
