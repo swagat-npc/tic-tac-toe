@@ -4,9 +4,17 @@ export type MainHeaderProps = {
   currentTurn: CellState;
   gameState: GameState;
   isBotPlaying: boolean;
-  isCoOpEnabled: boolean;
+  isOnline: boolean;
   changeIfBotIsPlaying: (playing: boolean) => void;
-  changeIfCoOpEnabled: (enable: boolean) => void;
+  changeIfOnline: (enable: boolean) => void;
+  onOpenLobby: () => void;
+};
+
+export type LobbyProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onCreateGame: (playerName: string, roomId: string) => void;
+  onJoinGame: (playerName: string, roomId: string) => void;
 };
 
 export type PlayerTurnProps = {
@@ -30,4 +38,10 @@ export type CellBtnProps = {
   disabled: boolean;
   customClass: string;
   action: (placement: number) => void;
+};
+
+export type GameProps = {
+  onOpenLobby: () => void;
+  online: boolean;
+  onLeaveOnline: (online: boolean) => void;
 };

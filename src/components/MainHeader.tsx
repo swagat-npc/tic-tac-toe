@@ -8,15 +8,16 @@ const MainHeader = ({
   currentTurn,
   gameState,
   isBotPlaying,
-  isCoOpEnabled,
+  isOnline,
   changeIfBotIsPlaying,
-  changeIfCoOpEnabled,
+  changeIfOnline,
+  onOpenLobby,
 }: MainHeaderProps) => {
   return (
     <div
       className={`main-header-container${isBotPlaying ? " singleplayer" : " multiplayer"}`}
     >
-      <div className="title">Tic-Tac-Toe{isCoOpEnabled && (<span className="subtitle">online</span>)}</div>
+      <div className="title">Tic-Tac-Toe{isOnline && (<span className="subtitle">online</span>)}</div>
       <div className="turn-container">
         <PlayerTurn
           label="Player 1"
@@ -29,7 +30,7 @@ const MainHeader = ({
             <ActionBtn
               label="SinglePlayer"
               action={() => changeIfBotIsPlaying(true)}
-              disabled={isBotPlaying || isCoOpEnabled}
+              disabled={isBotPlaying || isOnline}
               variant={true}
             />
           </div>
@@ -37,14 +38,14 @@ const MainHeader = ({
             <ActionBtn
               label="Local Co-op"
               action={() => changeIfBotIsPlaying(false)}
-              disabled={!isBotPlaying || isCoOpEnabled}
+              disabled={!isBotPlaying || isOnline}
               variant={true}
             />
           </div>
           <div className="mode-btn">
             <ActionBtn
-              label={isCoOpEnabled ? "Leave Game" : "Multiplayer"}
-              action={() => changeIfCoOpEnabled(!isCoOpEnabled)}
+              label={isOnline ? "Leave Game" : "Multiplayer"}
+              action={isOnline ? () => changeIfOnline(false) : onOpenLobby}
               variant={true}
             />
           </div>

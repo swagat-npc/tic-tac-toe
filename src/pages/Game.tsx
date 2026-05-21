@@ -8,6 +8,7 @@ import type {
   WinConditionResponse,
 } from "../types/Response";
 import "./Game.css";
+import type { GameProps } from "../types/Prop";
 
 const WIN_CONDITIONS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
@@ -17,17 +18,23 @@ const WIN_CONDITIONS = [
 
 const TOTAL_TURNS = 9;
 
-const Game = () => {
+const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
   const [turn, setTurn] = useState<number>(0);
   const [cells, setCells] = useState<CellState[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.Ongoing);
   const [winCombo, setWinCombo] = useState<number[]>([]);
   const [isBotPlaying, setBotIsPlaying] = useState<boolean>(true);
-  const [isCoOpEnabled, setCoOpIsEnabled] = useState<boolean>(false);
+  const [isOnline, setIsOnline] = useState<boolean>(false);
 
   useEffect(() => {
     resetGame();
   }, []);
+
+  useEffect(() => {
+    resetGame();
+    setBotIsPlaying(false);
+    setIsOnline(online);
+  }, [online]);
 
   const resetGame = () => {
     setTurn(0);
@@ -165,10 +172,11 @@ const Game = () => {
     resetGame();
   }
 
-  const changeIfCoOpEnabled = (enable: boolean) => {
-    setCoOpIsEnabled(enable);
-    if (enable) setBotIsPlaying(false);
+  const changeIfOnline = (online: boolean) => {
     resetGame();
+    setIsOnline(online);
+    setBotIsPlaying(false);
+    onLeaveOnline(false);
   }
 
   return (
@@ -178,9 +186,10 @@ const Game = () => {
           currentTurn={currentTurn(turn)}
           gameState={gameState}
           isBotPlaying={isBotPlaying}
-          isCoOpEnabled={isCoOpEnabled}
+          isOnline={isOnline}
           changeIfBotIsPlaying={changeIfBotIsPlaying}
-          changeIfCoOpEnabled={changeIfCoOpEnabled}
+          changeIfOnline={changeIfOnline}
+          onOpenLobby={onOpenLobby}
         ></MainHeader>
       </section>
       <section id="grid">
