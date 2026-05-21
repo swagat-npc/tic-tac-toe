@@ -1,7 +1,7 @@
 :root {
   --btn-width: 8rem;
   --btn-height: 2.5rem;
-  --btn-height-variant: 1.65rem;
+  --btn-height-variant: 1.2rem;
   --btn-bg: hsl(0, 94%, 72%);
   --btn-bottom-bg: hsl(0, 62%, 67%);
   --btn-shadow-bg: hsla(0, 62%, 67%, 0.15);
@@ -14,14 +14,14 @@
 
 .action-btn-container {
   position: relative;
-  max-width: 200px;
+  max-width: 500px;
 
   .action-btn {
     width: 100%;
     border: none;
     color: var(--text-cl);
     background-color: var(--btn-bg);
-    padding: 0.75rem 1.5rem;
+    padding: 0.85rem 1.5rem;
     position: relative;
     border-radius: 15px;
     font-size: 1rem;
@@ -38,7 +38,7 @@
     background-color: var(--btn-bottom-bg);
     border-radius: var(--border-radius);
     position: absolute;
-    top: 12px;
+    top: 20px;
     z-index: -1;
   }
 
@@ -49,7 +49,7 @@
     background-color: var(--btn-shadow-bg);
     border-radius: var(--border-radius);
     position: absolute;
-    top: 15px;
+    top: 24px;
     left: -4px;
     z-index: -2;
   }

@@ -7,7 +7,16 @@
     .title {
         font-weight: 800;
         font-size: 42px;
-        margin-bottom: 20px;
+        line-height: 42px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: chartreuse;
+        position: absolute;
+        bottom: -12px;
     }
     
     .turn-container {
@@ -27,6 +36,7 @@
         display: flex;
         flex-direction: column;
         gap: 30px;
+        min-width: 150px;
     }
 
     .outcome {

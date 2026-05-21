@@ -7,14 +7,16 @@ import PlayerTurn from "./PlayerTurn";
 const MainHeader = ({
   currentTurn,
   gameState,
-  mode: isSinglePlayer,
-  modeAction,
+  isBotPlaying,
+  isCoOpEnabled,
+  changeIfBotIsPlaying,
+  changeIfCoOpEnabled,
 }: MainHeaderProps) => {
   return (
     <div
-      className={`main-header-container${isSinglePlayer ? " singleplayer" : " multiplayer"}`}
+      className={`main-header-container${isBotPlaying ? " singleplayer" : " multiplayer"}`}
     >
-      <div className="title">Tic-Tac-Toe</div>
+      <div className="title">Tic-Tac-Toe{isCoOpEnabled && (<span className="subtitle">online</span>)}</div>
       <div className="turn-container">
         <PlayerTurn
           label="Player 1"
@@ -26,16 +28,23 @@ const MainHeader = ({
           <div className="mode-btn">
             <ActionBtn
               label="SinglePlayer"
-              action={modeAction}
-              disabled={isSinglePlayer}
+              action={() => changeIfBotIsPlaying(true)}
+              disabled={isBotPlaying || isCoOpEnabled}
               variant={true}
             />
           </div>
           <div className="mode-btn">
             <ActionBtn
-              label="Multiplayer"
-              action={modeAction}
-              disabled={!isSinglePlayer}
+              label="Local Co-op"
+              action={() => changeIfBotIsPlaying(false)}
+              disabled={!isBotPlaying || isCoOpEnabled}
+              variant={true}
+            />
+          </div>
+          <div className="mode-btn">
+            <ActionBtn
+              label={isCoOpEnabled ? "Leave Game" : "Multiplayer"}
+              action={() => changeIfCoOpEnabled(!isCoOpEnabled)}
               variant={true}
             />
           </div>
@@ -51,7 +60,7 @@ const MainHeader = ({
         className={`outcome ${gameState !== GameState.Ongoing ? "ended" : ""}`}
       >
         <span>
-          {!isSinglePlayer && gameState !== GameState.Tie
+          {!isBotPlaying && gameState !== GameState.Tie
             ? `Player ${gameState === GameState.Win ? "1" : "2"} Wins`
             : gameState}
         </span>

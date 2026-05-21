@@ -22,7 +22,8 @@ const Game = () => {
   const [cells, setCells] = useState<CellState[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.Ongoing);
   const [winCombo, setWinCombo] = useState<number[]>([]);
-  const [singlePlayer, setSinglePlayer] = useState<boolean>(true);
+  const [isBotPlaying, setBotIsPlaying] = useState<boolean>(true);
+  const [isCoOpEnabled, setCoOpIsEnabled] = useState<boolean>(false);
 
   useEffect(() => {
     resetGame();
@@ -75,7 +76,7 @@ const Game = () => {
     if (!processTurn(updatedCells, turn)) return;
     const nextTurn = turn + 1;
 
-    if (currentTurn(nextTurn) === CellState.O && singlePlayer) {
+    if (currentTurn(nextTurn) === CellState.O && isBotPlaying) {
       handleAI(nextTurn, updatedCells);
     }
   };
@@ -159,8 +160,14 @@ const Game = () => {
     return givenTurn % 2 === 0 ? CellState.X : CellState.O;
   };
 
-  const modeChange = () => {
-    setSinglePlayer(!singlePlayer);
+  const changeIfBotIsPlaying = (playing: boolean) => {
+    setBotIsPlaying(playing);
+    resetGame();
+  }
+
+  const changeIfCoOpEnabled = (enable: boolean) => {
+    setCoOpIsEnabled(enable);
+    if (enable) setBotIsPlaying(false);
     resetGame();
   }
 
@@ -170,8 +177,10 @@ const Game = () => {
         <MainHeader
           currentTurn={currentTurn(turn)}
           gameState={gameState}
-          mode={singlePlayer}
-          modeAction={modeChange}
+          isBotPlaying={isBotPlaying}
+          isCoOpEnabled={isCoOpEnabled}
+          changeIfBotIsPlaying={changeIfBotIsPlaying}
+          changeIfCoOpEnabled={changeIfCoOpEnabled}
         ></MainHeader>
       </section>
       <section id="grid">

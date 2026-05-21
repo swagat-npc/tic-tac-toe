@@ -3,8 +3,10 @@ import type { CellState, GameState } from "./State";
 export type MainHeaderProps = {
   currentTurn: CellState;
   gameState: GameState;
-  mode: boolean;
-  modeAction: () => void;
+  isBotPlaying: boolean;
+  isCoOpEnabled: boolean;
+  changeIfBotIsPlaying: (playing: boolean) => void;
+  changeIfCoOpEnabled: (enable: boolean) => void;
 };
 
 export type PlayerTurnProps = {

@@ -4,6 +4,10 @@
   flex-direction: column;
   box-sizing: border-box;
   padding: 80px 100px;
+
+  @media (max-width: 755px) {
+    padding: 40px 80px;
+  }
 }
 
 
