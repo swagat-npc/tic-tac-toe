@@ -1,0 +1,30 @@
+.game-container {
+  border-inline: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 80px 100px;
+}
+
+
+#grid {
+  margin: 0 auto;
+  margin-bottom: 35px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.cell-btn-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+  gap: 25px;
+}
+
+#actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
