@@ -81,6 +81,7 @@ const usePusher = (roomId: string, playerName: string, isCreator: boolean, activ
     });
 
     channel.bind("client-reset", () => {
+      setLastOpponentMove(null);
       setLastReset((n) => n + 1);
     });
 
@@ -110,6 +111,7 @@ const usePusher = (roomId: string, playerName: string, isCreator: boolean, activ
   };
 
   const sendReset = () => {
+    setLastOpponentMove(null);
     channelRef.current?.trigger("client-reset", {});
   };
 
