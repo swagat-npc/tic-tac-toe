@@ -6,7 +6,7 @@ import "./Lobby.css";
 
 const generateRoomId = () => Math.random().toString(36).substring(2, 8).toUpperCase();
 
-const Lobby = ({ isOpen, onClose, onCreateGame, onJoinGame }: LobbyProps) => {
+const Lobby = ({ isOpen, onClose, onCreateGame }: LobbyProps) => {
   const [playerName, setPlayerName] = useState("");
   const [roomId, setRoomId] = useState("");
   const [generatedRoomId, setGeneratedRoomId] = useState("");
@@ -21,12 +21,12 @@ const Lobby = ({ isOpen, onClose, onCreateGame, onJoinGame }: LobbyProps) => {
 
   const handleStart = () => {
     if (!playerName.trim()) return;
-    onCreateGame(playerName.trim(), generatedRoomId);
+    onCreateGame(playerName.trim(), generatedRoomId, true);
   };
 
   const handleJoin = () => {
     if (!playerName.trim() || !roomId.trim()) return;
-    onJoinGame(playerName.trim(), roomId.trim().toUpperCase());
+    onCreateGame(playerName.trim(), roomId.trim().toUpperCase(), false);
   };
 
   const handleBack = () => {

@@ -1,20 +1,23 @@
 import type { CellState, GameState } from "./State";
+import type { PusherStatus } from "../hooks/usePusher";
 
 export type MainHeaderProps = {
   currentTurn: CellState;
   gameState: GameState;
   isBotPlaying: boolean;
   isOnline: boolean;
+  pusherStatus: PusherStatus;
+  player1Name: string;
+  player2Name: string;
   changeIfBotIsPlaying: (playing: boolean) => void;
-  changeIfOnline: (enable: boolean) => void;
+  changeIfOnline: () => void;
   onOpenLobby: () => void;
 };
 
 export type LobbyProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreateGame: (playerName: string, roomId: string) => void;
-  onJoinGame: (playerName: string, roomId: string) => void;
+  onCreateGame: (playerName: string, roomId: string, create: boolean) => void;
 };
 
 export type PlayerTurnProps = {
@@ -43,5 +46,8 @@ export type CellBtnProps = {
 export type GameProps = {
   onOpenLobby: () => void;
   online: boolean;
-  onLeaveOnline: (online: boolean) => void;
+  onLeaveOnline: () => void;
+  playerName: string;
+  roomId: string;
+  isCreator: boolean;
 };

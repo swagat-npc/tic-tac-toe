@@ -9,6 +9,9 @@ const MainHeader = ({
   gameState,
   isBotPlaying,
   isOnline,
+  pusherStatus,
+  player1Name,
+  player2Name,
   changeIfBotIsPlaying,
   changeIfOnline,
   onOpenLobby,
@@ -20,7 +23,7 @@ const MainHeader = ({
       <div className="title">Tic-Tac-Toe{isOnline && (<span className="subtitle">online</span>)}</div>
       <div className="turn-container">
         <PlayerTurn
-          label="Player 1"
+          label={player1Name}
           symbol="X"
           align="left"
           isCurrentTurn={currentTurn === CellState.X}
@@ -45,24 +48,27 @@ const MainHeader = ({
           <div className="mode-btn">
             <ActionBtn
               label={isOnline ? "Leave Game" : "Multiplayer"}
-              action={isOnline ? () => changeIfOnline(false) : onOpenLobby}
+              action={isOnline ? changeIfOnline : onOpenLobby}
               variant={true}
             />
           </div>
         </div>
         <PlayerTurn
-          label="Player 2"
+          label={player2Name}
           symbol="O"
           align="right"
           isCurrentTurn={currentTurn === CellState.O}
         />
       </div>
+      {isOnline && pusherStatus === "waiting" && (
+        <div className="waiting-banner">Waiting for opponent to join...</div>
+      )}
       <div
         className={`outcome ${gameState !== GameState.Ongoing ? "ended" : ""}`}
       >
         <span>
           {!isBotPlaying && gameState !== GameState.Tie
-            ? `Player ${gameState === GameState.Win ? "1" : "2"} Wins`
+            ? `${gameState === GameState.Win ? player1Name : player2Name} Wins`
             : gameState}
         </span>
       </div>

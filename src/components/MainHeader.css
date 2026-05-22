@@ -39,6 +39,13 @@
         min-width: 150px;
     }
 
+    .waiting-banner {
+        font-size: 0.85rem;
+        color: var(--accent);
+        margin-top: 20px;
+        opacity: 0.85;
+    }
+
     .outcome {
         opacity: 0;
         font-size: large;

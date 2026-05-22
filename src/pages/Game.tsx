@@ -9,6 +9,7 @@ import type {
 } from "../types/Response";
 import "./Game.css";
 import type { GameProps } from "../types/Prop";
+import usePusher from "../hooks/usePusher";
 
 const WIN_CONDITIONS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
@@ -18,13 +19,20 @@ const WIN_CONDITIONS = [
 
 const TOTAL_TURNS = 9;
 
-const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
+const Game = ({ onOpenLobby, online, onLeaveOnline, playerName, roomId, isCreator }: GameProps) => {
   const [turn, setTurn] = useState<number>(0);
   const [cells, setCells] = useState<CellState[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.Ongoing);
   const [winCombo, setWinCombo] = useState<number[]>([]);
   const [isBotPlaying, setBotIsPlaying] = useState<boolean>(true);
   const [isOnline, setIsOnline] = useState<boolean>(false);
+
+  const { status: pusherStatus, lastOpponentMove, opponentName, sendMove, sendReset, lastReset } = usePusher(roomId, playerName, online);
+
+  const player1Name = isOnline ? (isCreator ? playerName : opponentName || "Opponent") : "Player 1";
+  const player2Name = isOnline ? (isCreator ? opponentName || "Opponent" : playerName) : "Player 2";
+
+  const isMyTurn = isCreator ? turn % 2 === 0 : turn % 2 === 1;
 
   useEffect(() => {
     resetGame();
@@ -35,6 +43,16 @@ const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
     setBotIsPlaying(false);
     setIsOnline(online);
   }, [online]);
+
+  useEffect(() => {
+    if (lastOpponentMove === null) return;
+    applyMove(lastOpponentMove);
+  }, [lastOpponentMove]);
+
+  useEffect(() => {
+    if (lastReset === 0) return;
+    resetGame();
+  }, [lastReset]);
 
   const resetGame = () => {
     setTurn(0);
@@ -73,16 +91,31 @@ const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
     }
   };
 
+  const applyMove = (index: number) => {
+    if (gameState !== GameState.Ongoing) return;
+    const updatedCells = [...cells];
+    updatedCells[index] = currentTurn(turn);
+    setCells(updatedCells);
+    processTurn(updatedCells, turn);
+  };
+
   const changeTurn = (index: number) => {
     if (gameState !== GameState.Ongoing) return;
+    if (isOnline && !isMyTurn) return;
 
     const updatedCells = [...cells];
     updatedCells[index] = currentTurn(turn);
     setCells(updatedCells);
 
-    if (!processTurn(updatedCells, turn)) return;
-    const nextTurn = turn + 1;
+    if (isOnline) {
+      sendMove(index);
+      processTurn(updatedCells, turn);
+      return;
+    }
 
+    if (!processTurn(updatedCells, turn)) return;
+
+    const nextTurn = turn + 1;
     if (currentTurn(nextTurn) === CellState.O && isBotPlaying) {
       handleAI(nextTurn, updatedCells);
     }
@@ -172,13 +205,6 @@ const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
     resetGame();
   }
 
-  const changeIfOnline = (online: boolean) => {
-    resetGame();
-    setIsOnline(online);
-    setBotIsPlaying(false);
-    onLeaveOnline(false);
-  }
-
   return (
     <div className="game-container">
       <section id="header">
@@ -187,8 +213,11 @@ const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
           gameState={gameState}
           isBotPlaying={isBotPlaying}
           isOnline={isOnline}
+          pusherStatus={pusherStatus}
+          player1Name={player1Name}
+          player2Name={player2Name}
           changeIfBotIsPlaying={changeIfBotIsPlaying}
-          changeIfOnline={changeIfOnline}
+          changeIfOnline={onLeaveOnline}
           onOpenLobby={onOpenLobby}
         ></MainHeader>
       </section>
@@ -201,7 +230,7 @@ const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
                 placement={index}
                 symbol={cell}
                 currentTurn={currentTurn(turn)}
-                disabled={cell !== CellState.T}
+                disabled={cell !== CellState.T || (isOnline && !isMyTurn)}
                 action={changeTurn}
                 customClass={
                   (winCombo.includes(index) ? "winner " : "") +
@@ -213,7 +242,7 @@ const Game = ({ onOpenLobby, online, onLeaveOnline }: GameProps) => {
         </div>
       </section>
       <section id="actions">
-        <ActionBtn label="Reset 🖱✨" action={resetGame} />
+        <ActionBtn label="Reset 🖱✨" action={() => { resetGame(); if (isOnline) sendReset(); }} />
       </section>
     </div>
   );
