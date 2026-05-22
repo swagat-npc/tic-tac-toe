@@ -9,21 +9,34 @@ const pusher = new Pusher({
 });
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).end();
   }
 
-  const { socket_id, channel_name, username, isCreator } = req.body as {
-    socket_id: string;
-    channel_name: string;
-    username?: string;
-    isCreator?: string;
-  };
+  try {
+    const { socket_id, channel_name, username, isCreator } = req.body as {
+      socket_id: string;
+      channel_name: string;
+      username?: string;
+      isCreator?: string;
+    };
 
-  const authResponse = pusher.authorizeChannel(socket_id, channel_name, {
-    user_id: socket_id,
-    user_info: { username: username ?? "Anonymous", isCreator: isCreator === "true" },
-  });
+    const authResponse = pusher.authorizeChannel(socket_id, channel_name, {
+      user_id: socket_id,
+      user_info: { username: username ?? "Anonymous", isCreator: isCreator === "true" },
+    });
 
-  return res.status(200).json(authResponse);
+    return res.status(200).json(authResponse);
+  } catch (err) {
+    console.error("Pusher auth error:", err);
+    return res.status(500).json({ error: String(err) });
+  }
 }
