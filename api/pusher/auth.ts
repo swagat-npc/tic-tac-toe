@@ -13,15 +13,16 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).end();
   }
 
-  const { socket_id, channel_name, username } = req.body as {
+  const { socket_id, channel_name, username, isCreator } = req.body as {
     socket_id: string;
     channel_name: string;
     username?: string;
+    isCreator?: string;
   };
 
   const authResponse = pusher.authorizeChannel(socket_id, channel_name, {
     user_id: socket_id,
-    user_info: { username: username ?? "Anonymous" },
+    user_info: { username: username ?? "Anonymous", isCreator: isCreator === "true" },
   });
 
   return res.status(200).json(authResponse);

@@ -27,7 +27,7 @@ const Game = ({ onOpenLobby, online, onLeaveOnline, playerName, roomId, isCreato
   const [isBotPlaying, setBotIsPlaying] = useState<boolean>(true);
   const [isOnline, setIsOnline] = useState<boolean>(false);
 
-  const { status: pusherStatus, lastOpponentMove, opponentName, sendMove, sendReset, lastReset } = usePusher(roomId, playerName, online);
+  const { status: pusherStatus, lastOpponentMove, opponentName, prevOpponentName, memberJoined, creatorLeft, sendMove, sendReset, sendSync, lastSync, lastReset } = usePusher(roomId, playerName, isCreator, online);
 
   const player1Name = isOnline ? (isCreator ? playerName : opponentName || "Opponent") : "Player 1";
   const player2Name = isOnline ? (isCreator ? opponentName || "Opponent" : playerName) : "Player 2";
@@ -53,6 +53,34 @@ const Game = ({ onOpenLobby, online, onLeaveOnline, playerName, roomId, isCreato
     if (lastReset === 0) return;
     resetGame();
   }, [lastReset]);
+
+  // Creator left — non-creator exits the game
+  useEffect(() => {
+    if (!creatorLeft) return;
+    onLeaveOnline();
+  }, [creatorLeft]);
+
+  // Someone joined — only creator handles this
+  useEffect(() => {
+    if (!memberJoined || !isCreator) return;
+    if (memberJoined.name === prevOpponentName) {
+      // Same player rejoined — sync current board state
+      sendSync({ cells, turn, gameState, winCombo });
+    } else {
+      // New player — reset creator's board and send fresh state
+      resetGame();
+      sendSync({ cells: Array(9).fill(""), turn: 0, gameState: GameState.Ongoing, winCombo: [] });
+    }
+  }, [memberJoined]);
+
+  // Received sync from creator — restore board state
+  useEffect(() => {
+    if (!lastSync) return;
+    setCells(lastSync.cells);
+    setTurn(lastSync.turn);
+    setGameState(lastSync.gameState);
+    setWinCombo(lastSync.winCombo);
+  }, [lastSync]);
 
   const resetGame = () => {
     setTurn(0);
